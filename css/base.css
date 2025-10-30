@@ -1,0 +1,5 @@
+/* Base CSS imports modular files for better collaboration */
+@import 'variables.css';
+@import 'global.css';
+@import 'header.css';
+@import 'footer.css';

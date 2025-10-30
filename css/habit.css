@@ -1,0 +1,15 @@
+/* Page-specific styles for habit.html */
+.habit-detail {
+  background: white;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  max-width: 600px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

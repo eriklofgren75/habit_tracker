@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habit Tracker</title>
+  <!-- Base CSS imports global + shared styles -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <h1>Habit Tracker</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="habit.html">Habit Details</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <section class="intro">
+      <h2>Your Daily Goals</h2>
+      <p>Track and improve your habits over time.</p>
+    </section>
+
+    <!-- Filter section -->
+    <section class="filters">
+      <label for="category">Filter by Category:</label>
+      <select id="category">
+        <option value="all">All</option>
+        <option value="Health">Health</option>
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+      </select>
+    </section>
+
+    <!-- Habit list (will later be dynamic via JS) -->
+    <section class="habit-list">
+      <article class="habit-card">
+        <h3>Drink Water</h3>
+        <p>Category: Health</p>
+        <p>Frequency: Daily</p>
+        <p>Streak: 5 days</p>
+        <button>View Details</button>
+      </article>
+
+      <article class="habit-card">
+        <h3>Read 10 Pages</h3>
+        <p>Category: Personal</p>
+        <p>Frequency: Daily</p>
+        <p>Streak: 2 days</p>
+        <button>View Details</button>
+      </article>
+    </section>
+
+    <!-- Add Habit Form -->
+    <section class="add-habit">
+      <h2>Add a New Habit</h2>
+      <form id="habitForm">
+        <label for="habitName">Habit Name:</label>
+        <input type="text" id="habitName" name="habitName" required />
+
+        <label for="categorySelect">Category:</label>
+        <select id="categorySelect" name="categorySelect" required>
+          <option value="">--Select Category--</option>
+          <option value="Health">Health</option>
+          <option value="Work">Work</option>
+          <option value="Personal">Personal</option>
+        </select>
+
+        <label for="frequency">Frequency:</label>
+        <select id="frequency" name="frequency" required>
+          <option value="">--Select Frequency--</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+        </select>
+
+        <label for="notes">Notes:</label>
+        <textarea id="notes" name="notes" placeholder="Add details here..."></textarea>
+
+        <button type="submit">Add Habit</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>&copy; 2025 Habit Tracker | Built by Erik & Lucy</p>
+  </footer>
+</body>
+</html>
