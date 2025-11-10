@@ -16,5 +16,41 @@
     "completed": ["2025-10-24"],
     "notes": "Read self-improvement books.",
     "createdAt": "2025-10-21"
+  },
+  {
+    "id": 3,
+    "name": "Go for a Walk",
+    "category": "Health",
+    "frequency": "Daily",
+    "completed": ["2025-10-25"],
+    "notes": "Minimum 30 minutes",
+    "createdAt": "2025-10-22"
+  },
+  {
+    "id": 4,
+    "name": "Journal",
+    "category": "Personal",
+    "frequency": "Daily",
+    "completed": ["2025-10-26", "2025-10-27"],
+    "notes": "Reflect for 10 minutes",
+    "createdAt": "2025-10-22"
+  },
+  {
+    "id": 5,
+    "name": "Check Email Inbox",
+    "category": "Work",
+    "frequency": "Daily",
+    "completed": [],
+    "notes": "Clear unread messages",
+    "createdAt": "2025-10-23"
+  },
+  {
+    "id": 6,
+    "name": "Plan Tomorrow’s Schedule",
+    "category": "Work",
+    "frequency": "Daily",
+    "completed": ["2025-10-25"],
+    "notes": "Prepare tasks for next day",
+    "createdAt": "2025-10-24"
   }
 ]
