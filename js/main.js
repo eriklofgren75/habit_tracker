@@ -3,77 +3,6 @@ const habitList = document.querySelector(".habit-list");
 const categoryFilter = document.getElementById("category");
 const habitForm = document.getElementById("habitForm");
 
-// --- Initialize App ---
-async function init() {
-  // Check if habits already exist in localStorage
-  let habits = JSON.parse(localStorage.getItem("habits"));
-
-  if (!habits) {
-    // If not, fetch from JSON and save to localStorage
-    const response = await fetch("json/habits.json?nocache=" + Date.now());
-    habits = await response.json();
-    localStorage.setItem("habits", JSON.stringify(habits));
-    console.log("Loaded habits from JSON into localStorage.");
-  } else {
-    console.log("Loaded habits from localStorage.");
-  }
-
-  // Render all habits on load
-  renderHabits(habits);
-
-  // --- Filter functionality ---
-  categoryFilter.addEventListener("change", () => {
-    const selected = categoryFilter.value;
-    if (selected === "all") {
-      renderHabits(habits);
-    } else {
-      const filtered = habits.filter((h) => h.category === selected);
-      renderHabits(filtered);
-    }
-  });
-
-  // --- Form submission: Add new habit ---
-  habitForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    // Get user input
-    const name = document.getElementById("habitName").value.trim();
-    const category = document.getElementById("categorySelect").value;
-    const frequency = document.getElementById("frequency").value;
-    const notes = document.getElementById("notes").value.trim();
-
-    // Validation check (HTML also does this, but double-safe)
-    if (!name || !category || !frequency) {
-      alert("Please fill out all required fields.");
-      return;
-    }
-
-    // Create new habit object
-    const newHabit = {
-      id: Date.now(), // unique ID
-      name,
-      category,
-      frequency,
-      completed: [],
-      notes,
-      createdAt: new Date().toISOString().split("T")[0]
-    };
-
-    // Update localStorage
-    let currentHabits = JSON.parse(localStorage.getItem("habits")) || [];
-    currentHabits.push(newHabit);
-    localStorage.setItem("habits", JSON.stringify(currentHabits));
-
-    // Clear form
-    habitForm.reset();
-
-    // Re-render list with new habit
-    renderHabits(currentHabits);
-
-    console.log(`Added new habit: ${name}`);
-  });
-}
-
 // --- Render Habits ---
 function renderHabits(habitsArray) {
   habitList.innerHTML = ""; // Clear previous habits
@@ -87,14 +16,71 @@ function renderHabits(habitsArray) {
       <p><strong>Category:</strong> ${habit.category}</p>
       <p><strong>Frequency:</strong> ${habit.frequency}</p>
       <p><strong>Streak:</strong> ${habit.completed.length} days</p>
+      <p><strong>Start Date:</strong> ${habit.createdAt}</p>
+
       <button onclick="viewHabit(${habit.id})">View Details</button>
+      <button class="change-date-btn" data-id="${habit.id}">Change Start Date</button>
+      <input type="date" class="date-input" data-id="${habit.id}" style="display:none;">
     `;
 
     habitList.appendChild(card);
   });
 }
 
-// --- Resets Habits --- //
+// --- Initialize App ---
+async function init() {
+  let habits = JSON.parse(localStorage.getItem("habits"));
+
+  if (!habits) {
+    const response = await fetch("./json/habits.json?nocache=" + Date.now());
+    habits = await response.json();
+    localStorage.setItem("habits", JSON.stringify(habits));
+    console.log("Loaded habits from JSON into localStorage.");
+  } else {
+    console.log("Loaded habits from localStorage.");
+  }
+
+  renderHabits(habits);
+
+  // --- Filter by Category ---
+  categoryFilter.addEventListener("change", () => {
+    const selected = categoryFilter.value;
+    const habitsData = JSON.parse(localStorage.getItem("habits"));
+    if (selected === "all") {
+      renderHabits(habitsData);
+    } else {
+      const filtered = habitsData.filter((h) => h.category === selected);
+      renderHabits(filtered);
+    }
+  });
+}
+
+// --- Event Delegation for Change Start Date ---
+habitList.addEventListener("click", (e) => {
+  if (e.target.classList.contains("change-date-btn")) {
+    const id = parseInt(e.target.dataset.id, 10);
+    const dateInput = document.querySelector(`.date-input[data-id="${id}"]`);
+    dateInput.style.display = "inline-block";
+    dateInput.focus();
+  }
+});
+
+// --- Handle Date Change Event ---
+habitList.addEventListener("change", (e) => {
+  if (e.target.classList.contains("date-input")) {
+    const id = parseInt(e.target.dataset.id, 10);
+    const habits = JSON.parse(localStorage.getItem("habits"));
+    const habit = habits.find((h) => h.id === id);
+
+    habit.createdAt = e.target.value;
+    localStorage.setItem("habits", JSON.stringify(habits));
+
+    alert(`Start date for "${habit.name}" updated to ${habit.createdAt}.`);
+    renderHabits(habits);
+  }
+});
+
+// --- Reset Habits Button ---
 document.getElementById("resetHabits").addEventListener("click", async () => {
   if (confirm("Are you sure you want to reset all habits to default?")) {
     const response = await fetch("./json/habits.json?nocache=" + Date.now());
@@ -105,11 +91,10 @@ document.getElementById("resetHabits").addEventListener("click", async () => {
   }
 });
 
-// --- Placeholder function for View Detail ---
+// --- View Habit Function ---
 window.viewHabit = function (id) {
-  // Redirect with URL parameter (for habit.html)
   window.location.href = `habit.html?id=${id}`;
 };
 
-// Initialize app
+// --- Run the App ---
 init();
