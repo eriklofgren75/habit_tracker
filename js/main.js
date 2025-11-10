@@ -94,6 +94,17 @@ function renderHabits(habitsArray) {
   });
 }
 
+// --- Resets Habits --- //
+document.getElementById("resetHabits").addEventListener("click", async () => {
+  if (confirm("Are you sure you want to reset all habits to default?")) {
+    const response = await fetch("./json/habits.json?nocache=" + Date.now());
+    const defaultHabits = await response.json();
+    localStorage.setItem("habits", JSON.stringify(defaultHabits));
+    renderHabits(defaultHabits);
+    alert("Habits reset to default!");
+  }
+});
+
 // --- Placeholder function for View Detail ---
 window.viewHabit = function (id) {
   // Redirect with URL parameter (for habit.html)
