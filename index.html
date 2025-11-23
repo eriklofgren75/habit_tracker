@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Habit Tracker</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/home.css" />
 </head>
@@ -13,20 +15,20 @@
     <h1>Habit Tracker</h1>
     <nav>
       <ul>
-        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html" class="active">Home</a></li>
         <li><a href="habit.html">Habit Details</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- ===== MAIN CONTENT ===== -->
+  <!-- MAIN -->
   <main>
     <section class="intro">
       <h2>Your Daily Goals</h2>
       <p>Track and improve your habits over time.</p>
     </section>
 
-    <!-- Filter section -->
+    <!-- Filter -->
     <section class="filters">
       <label for="category">Filter by Category:</label>
       <select id="category">
@@ -37,28 +39,13 @@
       </select>
     </section>
 
-    <!-- Habit list -->
-    <section class="habit-list">
-      <article class="habit-card">
-        <h3>Drink Water</h3>
-        <p>Category: Health</p>
-        <p>Frequency: Daily</p>
-        <p>Streak: 5 days</p>
-        <button>View Details</button>
-      </article>
+    <!-- Habit list (dynamic) -->
+    <section class="habit-list"></section>
 
-      <article class="habit-card">
-        <h3>Read 10 Pages</h3>
-        <p>Category: Personal</p>
-        <p>Frequency: Daily</p>
-        <p>Streak: 2 days</p>
-        <button>View Details</button>
-      </article>
-    </section>
-
-    <!-- Add Habit Form -->
+    <!-- Add Habit -->
     <section class="add-habit">
       <h2>Add a New Habit</h2>
+
       <form id="habitForm">
         <label for="habitName">Habit Name:</label>
         <input type="text" id="habitName" name="habitName" required />
@@ -85,6 +72,7 @@
       </form>
     </section>
   </main>
+
   <footer>
     <p>&copy; 2025 Habit Tracker | Built by Erik & Lucy</p>
     <button id="resetHabits">Reset to Default</button>
