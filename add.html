@@ -3,48 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Habit Tracker</title>
-
-  <!-- Styles -->
+  <title>Habit Details</title>
   <link rel="stylesheet" href="css/base.css" />
-  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/habit.css" />
 </head>
 
 <body>
   <header>
-    <h1>Habit Tracker</h1>
+    <h1>Add Habit</h1>
     <nav>
       <ul>
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="habit.html">Habit Details</a></li>
-        <li><a href="habit.html">Add Habit</a></li>
-
+        <li><a href="index.html">Back to Home</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- MAIN -->
   <main>
-    <section class="intro">
-      <h2>Your Daily Goals</h2>
-      <p>Track and improve your habits over time.</p>
-    </section>
-
-    <!-- Filter -->
-    <section class="filters">
-      <label for="category">Filter by Category:</label>
-      <select id="category">
-        <option value="all">All</option>
-        <option value="Health">Health</option>
-        <option value="Work">Work</option>
-        <option value="Personal">Personal</option>
-      </select>
-    </section>
-
-    <!-- Habit list (dynamic) -->
-    <section class="habit-list"></section>
-
-    <!-- Add Habit -->
     <section class="add-habit">
       <h2>Add a New Habit</h2>
 
@@ -76,9 +50,8 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Habit Tracker | Built by Erik & Lucy</p>
-    <button id="resetHabits">Reset to Default</button>
+    <p>&copy; 2025 Habit Tracker</p>
   </footer>
-  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/habit-details.js"></script>
 </body>
 </html>
