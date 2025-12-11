@@ -6,20 +6,78 @@ header {
   text-align: center;
 }
 
-nav ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+/* TITLE */
+header h1 {
+  margin: 0;
+  text-align: center;
 }
 
-nav a {
+/* NAV CONTAINER */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  position: relative;
+}
+
+/* HAMBURGER BUTTON (mobile only) */
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  display: block;
+}
+
+/* NAV LINKS (start hidden on mobile) */
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: var(--primary-color);
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* When menu is opened on mobile */
+.nav-links.open {
+  display: flex;
+}
+
+/* LINK STYLES */
+.nav-links a {
   color: white;
   text-decoration: none;
   font-weight: bold;
 }
 
-nav a:hover {
-  text-decoration: underline;
+/* ACTIVE PAGE */
+.nav-links a.active {
+  border-bottom: 2px solid var(--accent-color);
+}
+
+/* --- DESKTOP VIEW --- */
+@media (min-width: 700px) {
+
+  /* Hide hamburger button */
+  .menu-toggle {
+    display: none;
+  }
+
+  /* Horizontal links */
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+    background: none;
+    width: auto;
+  }
 }

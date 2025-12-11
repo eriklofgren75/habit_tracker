@@ -10,18 +10,33 @@
   <link rel="stylesheet" href="css/home.css" />
 </head>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.querySelector(".menu-toggle");
+    const menu = document.querySelector(".nav-links");
+
+    if (btn && menu) {
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("open");
+      });
+    }
+  });
+</script>
+
+
 <body>
   <header>
     <h1>Habit Tracker</h1>
-    <nav>
-      <ul>
+    <nav class="navbar">
+      <button class="menu-toggle" aria-label="Open Menu">☰</button>
+      <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="habit.html">Habit Details</a></li>
-        <li><a href="add.html">Add Habit</a></li>
-
+        <li><a href="index.html?add=1">Add Habit</a></li>
       </ul>
     </nav>
   </header>
+
 
   <!-- MAIN -->
   <main>
@@ -74,6 +89,41 @@
       </form>
     </section>
   </main>
+
+  <!-- ADD HABIT MODAL -->
+<div id="addHabitModal" class="modal hidden">
+  <div class="modal-content">
+    <button class="close-modal">&times;</button>
+
+    <h2>Add New Habit</h2>
+
+    <form id="modalHabitForm">
+      <label for="mHabitName">Habit Name:</label>
+      <input type="text" id="mHabitName" required />
+
+      <label for="mCategorySelect">Category:</label>
+      <select id="mCategorySelect" required>
+        <option value="">--Select Category--</option>
+        <option value="Health">Health</option>
+        <option value="Work">Work</option>
+        <option value="Personal">Personal</option>
+      </select>
+
+      <label for="mFrequency">Frequency:</label>
+      <select id="mFrequency" required>
+        <option value="">--Select Frequency--</option>
+        <option value="Daily">Daily</option>
+        <option value="Weekly">Weekly</option>
+      </select>
+
+      <label for="mNotes">Notes:</label>
+      <textarea id="mNotes"></textarea>
+
+      <button type="submit">Add Habit</button>
+    </form>
+  </div>
+</div>
+
 
   <footer>
     <p>&copy; 2025 Habit Tracker | Built by Erik & Lucy</p>

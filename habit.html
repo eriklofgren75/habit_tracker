@@ -8,15 +8,33 @@
   <link rel="stylesheet" href="css/habit.css" />
 </head>
 
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.querySelector(".menu-toggle");
+    const menu = document.querySelector(".nav-links");
+
+    if (btn && menu) {
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("open");
+      });
+    }
+  });
+</script>
+
+
 <body>
   <header>
-    <h1>Habit Details</h1>
-    <nav>
-      <ul>
-        <li><a href="index.html">Back to Home</a></li>
+    <h1>Habit Tracker</h1>
+    <nav class="navbar">
+      <button class="menu-toggle" aria-label="Open Menu">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="habit.html">Habit Details</a></li>
+        <li><a href="index.html?add=1">Add Habit</a></li>
       </ul>
     </nav>
   </header>
+
 
   <main>
     <section class="habit-detail">

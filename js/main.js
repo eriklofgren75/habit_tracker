@@ -8,17 +8,32 @@ const habitForm = document.getElementById("habitForm");
 const categoryFilter = document.getElementById("category");
 const resetBtn = document.getElementById("resetHabits");
 
-// Render initial list
+// Modal elements
+const modal = document.getElementById("addHabitModal");
+const closeBtn = document.querySelector(".close-modal");
+const modalForm = document.getElementById("modalHabitForm");
+
 async function init() {
   const habits = await getDisplay();
-  window._catalogRendered = habits; // debug helper
   renderHabitCards(habits, habitList);
 
+  // Make sure modal is hidden unless specifically requested
+  if (modal) modal.classList.add("hidden");
+
   wireUp();
+
+  // Open modal if ?add is present
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("add")) {
+    openModal();
+  }
 }
 
+// =====================
+// Event Wiring
+// =====================
 function wireUp() {
-  // Delegated click listener for change date / details button
+  // Click events on habit cards (change date, details)
   habitList.addEventListener("click", (e) => {
     const idAttr = e.target.dataset.id;
     if (!idAttr) return;
@@ -27,7 +42,8 @@ function wireUp() {
     if (e.target.classList.contains("change-date-btn")) {
       const input = document.querySelector(`.date-input[data-id="${id}"]`);
       if (input) {
-        input.style.display = input.style.display === "inline-block" ? "none" : "inline-block";
+        input.style.display =
+          input.style.display === "inline-block" ? "none" : "inline-block";
         input.focus();
       }
       return;
@@ -39,33 +55,32 @@ function wireUp() {
     }
   });
 
+  // Handle date change
   habitList.addEventListener("change", (e) => {
-    if (e.target.classList.contains("date-input")) {
-      // We'll call habit update via fetch to storage through habits.update flow.
-      // To keep main.js minimal, reload page state after updating via API functions.
-      // For now, call a simple event that habit.js handles (we will re-render in this file).
-      const id = Number(e.target.dataset.id);
-      const newDate = e.target.value;
-      // Update via storage helper: create/update a user habit
-      // We import saveUserHabits via storage.js earlier if needed
-      const user = loadUserHabits();
-      const idx = user.findIndex(h => h.id === id);
-      if (idx !== -1) {
-        user[idx].createdAt = newDate;
-      } else {
-        // create a user-modified copy
-        user.push({ id, createdAt: newDate, name: "Modified habit", completed: [] });
-      }
-      saveUserHabits(user);
-      // Re-render
-      getDisplay().then(h => renderHabitCards(h, habitList));
+    if (!e.target.classList.contains("date-input")) return;
+
+    const id = Number(e.target.dataset.id);
+    const newDate = e.target.value;
+
+    let user = loadUserHabits();
+    const idx = user.findIndex((h) => h.id === id);
+
+    if (idx !== -1) {
+      user[idx].createdAt = newDate;
+    } else {
+      user.push({ id, createdAt: newDate, name: "Modified Habit", completed: [] });
     }
+
+    saveUserHabits(user);
+
+    getDisplay().then((list) => renderHabitCards(list, habitList));
   });
 
-  // form submit
+  // Normal add-habit form
   if (habitForm) {
     habitForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const newHabit = {
         name: e.target.habitName.value.trim(),
         category: e.target.categorySelect.value,
@@ -76,30 +91,73 @@ function wireUp() {
       };
 
       createUserHabit(newHabit);
+
       const all = await getDisplay();
       renderHabitCards(all, habitList);
+
       habitForm.reset();
     });
   }
 
-  // Filtering
+  // Modal add-habit form
+  if (modalForm) {
+    modalForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const newHabit = {
+        name: document.getElementById("mHabitName").value.trim(),
+        category: document.getElementById("mCategorySelect").value,
+        frequency: document.getElementById("mFrequency").value,
+        notes: document.getElementById("mNotes").value.trim(),
+        completed: [],
+        createdAt: new Date().toISOString().split("T")[0]
+      };
+
+      createUserHabit(newHabit);
+
+      const all = await getDisplay();
+      renderHabitCards(all, habitList);
+
+      closeModal();
+      modalForm.reset();
+    });
+  }
+
+  // Filter habits
   if (categoryFilter) {
     categoryFilter.addEventListener("change", async () => {
       const all = await getDisplay();
       const val = categoryFilter.value;
       if (val === "all") renderHabitCards(all, habitList);
-      else renderHabitCards(all.filter(h => h.category === val), habitList);
+      else renderHabitCards(all.filter((h) => h.category === val), habitList);
     });
   }
 
-  // Reset user habits (doesn't alter catalog JSON)
+  // Reset habits
   if (resetBtn) {
     resetBtn.addEventListener("click", () => {
       if (!confirm("Reset only user-saved habits to empty?")) return;
+
       clearUserHabits();
-      getDisplay().then(h => renderHabitCards(h, habitList));
+      getDisplay().then((h) => renderHabitCards(h, habitList));
     });
   }
+
+  // Close modal
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeModal);
+  }
+}
+
+// =====================
+// Modal functions
+// =====================
+export function openModal() {
+  modal?.classList.remove("hidden");
+}
+
+function closeModal() {
+  modal?.classList.add("hidden");
 }
 
 init();
