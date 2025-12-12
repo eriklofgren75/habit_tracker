@@ -1,105 +1,158 @@
-import { getAllHabits as getDisplay } from "./habits.js";
-import { createUserHabit } from "./habits.js";
+// ================= IMPORTS ===================
+import { getAllHabits, createUserHabit } from "./habits.js";
 import { loadUserHabits, saveUserHabits, clearUserHabits } from "./storage.js";
 import { renderHabitCards } from "./ui.js";
 
+// Detect which page we are on
+const isIndexPage = document.querySelector(".habit-list") !== null;
+const isDetailPage = window.location.pathname.includes("habit.html");
+
+// Global DOM references (some may be null on habit.html)
 const habitList = document.querySelector(".habit-list");
 const habitForm = document.getElementById("habitForm");
 const categoryFilter = document.getElementById("category");
 const resetBtn = document.getElementById("resetHabits");
 
-// Modal elements
-const modal = document.getElementById("addHabitModal");
-const closeBtn = document.querySelector(".close-modal");
+// Modals
+const addModal = document.getElementById("addHabitModal");
+const addCloseBtn = document.querySelector(".close-modal");
 const modalForm = document.getElementById("modalHabitForm");
 
-async function init() {
-  const habits = await getDisplay();
-  renderHabitCards(habits, habitList);
+const pickerModal = document.getElementById("habitPickerModal");
+const pickerCloseBtn = document.querySelector(".picker-close");
+const pickerList = document.getElementById("habitPickerList");
 
-  // Make sure modal is hidden unless specifically requested
-  if (modal) modal.classList.add("hidden");
+// Nav buttons
+const navHabitDetails = document.getElementById("navHabitDetails");
+const navAddHabit = document.getElementById("navAddHabit");
 
-  wireUp();
 
-  // Open modal if ?add is present
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("add")) {
-    openModal();
-  }
+// =============== MODAL HELPERS ==================
+function openAddModal() {
+  if (addModal) addModal.classList.remove("hidden");
 }
 
-// =====================
-// Event Wiring
-// =====================
-function wireUp() {
-  // Click events on habit cards (change date, details)
-  habitList.addEventListener("click", (e) => {
-    const idAttr = e.target.dataset.id;
-    if (!idAttr) return;
-    const id = Number(idAttr);
+function closeAddModal() {
+  if (addModal) addModal.classList.add("hidden");
+}
 
-    if (e.target.classList.contains("change-date-btn")) {
-      const input = document.querySelector(`.date-input[data-id="${id}"]`);
-      if (input) {
-        input.style.display =
-          input.style.display === "inline-block" ? "none" : "inline-block";
-        input.focus();
+function openPickerModal() {
+  if (pickerModal) pickerModal.classList.remove("hidden");
+}
+
+function closePickerModal() {
+  if (pickerModal) pickerModal.classList.add("hidden");
+}
+
+
+// =============== PICKER MODAL POPULATION ==================
+async function buildPickerModal() {
+  if (!pickerList) return;
+
+  const habits = await getAllHabits();
+  pickerList.innerHTML = "";
+
+  habits.forEach(h => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <button class="picker-item" data-id="${h.id}">
+        ${h.name}
+      </button>
+    `;
+    pickerList.appendChild(li);
+  });
+}
+
+
+// =============== MAIN INITIALIZER ================
+async function init() {
+  // ------------ INDEX PAGE LOGIC -------------
+  if (isIndexPage) {
+    const habits = await getAllHabits();
+    renderHabitCards(habits, habitList);
+
+    // Card actions (view details / change start date)
+    habitList.addEventListener("click", (e) => {
+      const id = Number(e.target.dataset.id);
+      if (!id) return;
+
+      if (e.target.classList.contains("details-btn")) {
+        window.location.href = `habit.html?id=${id}`;
       }
-      return;
+
+      if (e.target.classList.contains("change-date-btn")) {
+        const input = document.querySelector(`.date-input[data-id="${id}"]`);
+        if (!input) return;
+        input.showPicker(); // Better experience
+      }
+    });
+
+    // Add habit (inline form)
+    if (habitForm) {
+      habitForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const newHabit = {
+          name: habitForm.habitName.value.trim(),
+          category: habitForm.categorySelect.value,
+          frequency: habitForm.frequency.value,
+          notes: habitForm.notes.value.trim(),
+          completed: [],
+          createdAt: new Date().toISOString().split("T")[0]
+        };
+
+        createUserHabit(newHabit);
+
+        const all = await getAllHabits();
+        renderHabitCards(all, habitList);
+
+        habitForm.reset();
+      });
     }
 
-    if (e.target.classList.contains("details-btn")) {
-      window.location.href = `habit.html?id=${id}`;
-      return;
-    }
-  });
-
-  // Handle date change
-  habitList.addEventListener("change", (e) => {
-    if (!e.target.classList.contains("date-input")) return;
-
-    const id = Number(e.target.dataset.id);
-    const newDate = e.target.value;
-
-    let user = loadUserHabits();
-    const idx = user.findIndex((h) => h.id === id);
-
-    if (idx !== -1) {
-      user[idx].createdAt = newDate;
-    } else {
-      user.push({ id, createdAt: newDate, name: "Modified Habit", completed: [] });
+    // Filtering
+    if (categoryFilter) {
+      categoryFilter.addEventListener("change", async () => {
+        const all = await getAllHabits();
+        const val = categoryFilter.value;
+        renderHabitCards(
+          val === "all" ? all : all.filter(h => h.category === val),
+          habitList
+        );
+      });
     }
 
-    saveUserHabits(user);
+    // Reset
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        if (confirm("Reset only user-saved habits to empty?")) {
+          clearUserHabits();
+          getAllHabits().then(data => renderHabitCards(data, habitList));
+        }
+      });
+    }
+  }
 
-    getDisplay().then((list) => renderHabitCards(list, habitList));
-  });
+  // --------- UNIVERSAL NAV BUTTON LOGIC (works on BOTH pages) ---------
 
-  // Normal add-habit form
-  if (habitForm) {
-    habitForm.addEventListener("submit", async (e) => {
+  // Habit Details (opens picker modal)
+  if (navHabitDetails) {
+    navHabitDetails.addEventListener("click", async (e) => {
       e.preventDefault();
-
-      const newHabit = {
-        name: e.target.habitName.value.trim(),
-        category: e.target.categorySelect.value,
-        frequency: e.target.frequency.value,
-        notes: e.target.notes.value.trim(),
-        completed: [],
-        createdAt: new Date().toISOString().split("T")[0]
-      };
-
-      createUserHabit(newHabit);
-
-      const all = await getDisplay();
-      renderHabitCards(all, habitList);
-
-      habitForm.reset();
+      await buildPickerModal();
+      openPickerModal();
     });
   }
 
-  // Modal add-habit form
+  // Add Habit (opens add modal)
+  if (navAddHabit) {
+    navAddHabit.addEventListener("click", (e) => {
+      e.preventDefault();
+      openAddModal();
+    });
+  }
+
+  // Add Habit Modal Submit
   if (modalForm) {
     modalForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -115,49 +168,29 @@ function wireUp() {
 
       createUserHabit(newHabit);
 
-      const all = await getDisplay();
-      renderHabitCards(all, habitList);
+      if (isIndexPage) {
+        const all = await getAllHabits();
+        renderHabitCards(all, habitList);
+      }
 
-      closeModal();
+      closeAddModal();
       modalForm.reset();
     });
   }
 
-  // Filter habits
-  if (categoryFilter) {
-    categoryFilter.addEventListener("change", async () => {
-      const all = await getDisplay();
-      const val = categoryFilter.value;
-      if (val === "all") renderHabitCards(all, habitList);
-      else renderHabitCards(all.filter((h) => h.category === val), habitList);
+  // Modal Close Buttons
+  if (addCloseBtn) addCloseBtn.addEventListener("click", closeAddModal);
+  if (pickerCloseBtn) pickerCloseBtn.addEventListener("click", closePickerModal);
+
+  // Picker Modal item click
+  if (pickerList) {
+    pickerList.addEventListener("click", (e) => {
+      if (e.target.classList.contains("picker-item")) {
+        const id = e.target.dataset.id;
+        window.location.href = `habit.html?id=${id}`;
+      }
     });
   }
-
-  // Reset habits
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      if (!confirm("Reset only user-saved habits to empty?")) return;
-
-      clearUserHabits();
-      getDisplay().then((h) => renderHabitCards(h, habitList));
-    });
-  }
-
-  // Close modal
-  if (closeBtn) {
-    closeBtn.addEventListener("click", closeModal);
-  }
-}
-
-// =====================
-// Modal functions
-// =====================
-export function openModal() {
-  modal?.classList.remove("hidden");
-}
-
-function closeModal() {
-  modal?.classList.add("hidden");
 }
 
 init();

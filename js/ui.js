@@ -33,13 +33,24 @@ export function renderHabitCards(habits, container) {
 }
 
 export function renderHabitDetails(habit, container) {
+  const completedList = (habit.completed && habit.completed.length > 0)
+    ? habit.completed.map(date => `<li>${escapeHtml(date)}</li>`).join("")
+    : "<li>No completed days yet.</li>";
+
   container.innerHTML = `
     <section class="habit-details">
       <h2>${escapeHtml(habit.name)}</h2>
+
       <p><strong>Category:</strong> ${escapeHtml(habit.category || "")}</p>
       <p><strong>Frequency:</strong> ${escapeHtml(habit.frequency || "")}</p>
       <p><strong>Start:</strong> ${escapeHtml(habit.createdAt || "")}</p>
-      <p><strong>Streak:</strong> ${Array.isArray(habit.completed) ? habit.completed.length : 0} days</p>
+      <p><strong>Streak:</strong> ${habit.completed ? habit.completed.length : 0} days</p>
+
+      <h3>Completion History</h3>
+      <ul class="completion-history">
+        ${completedList}
+      </ul>
+
       <p><strong>Notes:</strong> ${escapeHtml(habit.notes || "No notes")}</p>
 
       <div class="details-actions">
@@ -49,6 +60,7 @@ export function renderHabitDetails(habit, container) {
     </section>
   `;
 }
+
 
 // small helper to avoid HTML injection when rendering user-supplied values
 function escapeHtml(str) {

@@ -23,20 +23,21 @@
   });
 </script>
 
-
 <body>
+  <!-- HEADER -->
   <header>
     <h1>Habit Tracker</h1>
     <nav class="navbar">
       <button class="menu-toggle" aria-label="Open Menu">☰</button>
       <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="habit.html">Habit Details</a></li>
-        <li><a href="index.html?add=1">Add Habit</a></li>
+
+        <!-- updated nav with IDs -->
+        <li><a href="#" id="navHabitDetails">Habit Details</a></li>
+        <li><a href="#" id="navAddHabit">Add Habit</a></li>
       </ul>
     </nav>
   </header>
-
 
   <!-- MAIN -->
   <main>
@@ -59,7 +60,7 @@
     <!-- Habit list (dynamic) -->
     <section class="habit-list"></section>
 
-    <!-- Add Habit -->
+    <!-- Add Habit form (still present for desktop/TA expectations) -->
     <section class="add-habit">
       <h2>Add a New Habit</h2>
 
@@ -91,44 +92,57 @@
   </main>
 
   <!-- ADD HABIT MODAL -->
-<div id="addHabitModal" class="modal hidden">
-  <div class="modal-content">
-    <button class="close-modal">&times;</button>
+  <div id="addHabitModal" class="modal hidden">
+    <div class="modal-content">
+      <button class="close-modal" aria-label="Close">&times;</button>
 
-    <h2>Add New Habit</h2>
+      <h2>Add New Habit</h2>
 
-    <form id="modalHabitForm">
-      <label for="mHabitName">Habit Name:</label>
-      <input type="text" id="mHabitName" required />
+      <form id="modalHabitForm">
+        <label for="mHabitName">Habit Name:</label>
+        <input type="text" id="mHabitName" required />
 
-      <label for="mCategorySelect">Category:</label>
-      <select id="mCategorySelect" required>
-        <option value="">--Select Category--</option>
-        <option value="Health">Health</option>
-        <option value="Work">Work</option>
-        <option value="Personal">Personal</option>
-      </select>
+        <label for="mCategorySelect">Category:</label>
+        <select id="mCategorySelect" required>
+          <option value="">--Select Category--</option>
+          <option value="Health">Health</option>
+          <option value="Work">Work</option>
+          <option value="Personal">Personal</option>
+        </select>
 
-      <label for="mFrequency">Frequency:</label>
-      <select id="mFrequency" required>
-        <option value="">--Select Frequency--</option>
-        <option value="Daily">Daily</option>
-        <option value="Weekly">Weekly</option>
-      </select>
+        <label for="mFrequency">Frequency:</label>
+        <select id="mFrequency" required>
+          <option value="">--Select Frequency--</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+        </select>
 
-      <label for="mNotes">Notes:</label>
-      <textarea id="mNotes"></textarea>
+        <label for="mNotes">Notes:</label>
+        <textarea id="mNotes"></textarea>
 
-      <button type="submit">Add Habit</button>
-    </form>
+        <button type="submit">Add Habit</button>
+      </form>
+    </div>
   </div>
-</div>
 
+  <!-- HABIT PICKER MODAL -->
+  <div id="habitPickerModal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content picker-content">
+      <button class="picker-close" aria-label="Close">&times;</button>
+      <h2>Select a Habit to View</h2>
+      <p>Choose a habit to view full details.</p>
+    
+      <ul id="habitPickerList" class="picker-list"></ul>
+    </div>
+  </div>
 
+  <!-- FOOTER -->
   <footer>
     <p>&copy; 2025 Habit Tracker | Built by Erik & Lucy</p>
     <button id="resetHabits">Reset to Default</button>
   </footer>
+
+  <!-- JS -->
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

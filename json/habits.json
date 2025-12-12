@@ -4,7 +4,7 @@
     "name": "Drink Water",
     "category": "Health",
     "frequency": "Daily",
-    "completed": ["2025-10-25", "2025-10-26", "2025-10-27"],
+    "completed": [],
     "notes": "8 cups a day",
     "createdAt": "2025-10-20"
   },
@@ -13,7 +13,7 @@
     "name": "Read 10 Pages",
     "category": "Personal",
     "frequency": "Daily",
-    "completed": ["2025-10-24"],
+    "completed": [],
     "notes": "Read self-improvement books.",
     "createdAt": "2025-10-21"
   },
@@ -22,7 +22,7 @@
     "name": "Go for a Walk",
     "category": "Health",
     "frequency": "Daily",
-    "completed": ["2025-10-25"],
+    "completed": [],
     "notes": "Minimum 30 minutes",
     "createdAt": "2025-10-22"
   },
@@ -31,7 +31,7 @@
     "name": "Journal",
     "category": "Personal",
     "frequency": "Daily",
-    "completed": ["2025-10-26", "2025-10-27"],
+    "completed": [],
     "notes": "Reflect for 10 minutes",
     "createdAt": "2025-10-22"
   },
@@ -49,7 +49,7 @@
     "name": "Plan Tomorrow’s Schedule",
     "category": "Work",
     "frequency": "Daily",
-    "completed": ["2025-10-25"],
+    "completed": [],
     "notes": "Prepare tasks for next day",
     "createdAt": "2025-10-24"
   }

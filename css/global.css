@@ -24,3 +24,28 @@ button {
 button:hover {
   background-color: var(--secondary-color);
 }
+
+/* === Prevent manual typing in date fields (professional solution) === */
+
+input[type="date"] {
+  cursor: pointer;
+}
+
+/* Disable typing inside the date input so users must select from the calendar */
+input[type="date"]::-webkit-datetime-edit-year-field,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field {
+  pointer-events: none;
+}
+
+/* Make the calendar icon easier to click */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* slightly larger tap target for mobile */
+input[type="date"] {
+  padding: 6px 8px;
+  font-size: 1rem;
+}
