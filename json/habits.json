@@ -6,7 +6,7 @@
     "frequency": "Daily",
     "completed": [],
     "notes": "8 cups a day",
-    "createdAt": "2025-10-20"
+    "createdAt": []
   },
   {
     "id": 2,
@@ -15,7 +15,7 @@
     "frequency": "Daily",
     "completed": [],
     "notes": "Read self-improvement books.",
-    "createdAt": "2025-10-21"
+    "createdAt": []
   },
   {
     "id": 3,
@@ -24,7 +24,7 @@
     "frequency": "Daily",
     "completed": [],
     "notes": "Minimum 30 minutes",
-    "createdAt": "2025-10-22"
+    "createdAt": []
   },
   {
     "id": 4,
@@ -33,7 +33,7 @@
     "frequency": "Daily",
     "completed": [],
     "notes": "Reflect for 10 minutes",
-    "createdAt": "2025-10-22"
+    "createdAt": []
   },
   {
     "id": 5,
@@ -42,7 +42,7 @@
     "frequency": "Daily",
     "completed": [],
     "notes": "Clear unread messages",
-    "createdAt": "2025-10-23"
+    "createdAt": []
   },
   {
     "id": 6,
@@ -51,6 +51,6 @@
     "frequency": "Daily",
     "completed": [],
     "notes": "Prepare tasks for next day",
-    "createdAt": "2025-10-24"
+    "createdAt": []
   }
 ]

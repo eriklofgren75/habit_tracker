@@ -121,7 +121,7 @@ header h1 {
   border: none;
   cursor: pointer;
 
-  opacity: 0.9;
+  opacity: 1 !important;
 }
 
 .close-modal:hover,

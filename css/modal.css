@@ -35,10 +35,32 @@
   color: #333;
   box-shadow: 0 0 6px rgba(0,0,0,0.2);
   transition: transform 0.2s ease, background 0.2 ease;
+  opacity: 1 !important;
 }
 
 .close-modal:hover {
   background: #ff4d4d;
   color: white;
   transform: scale(1.1);
+}
+
+.modal-content form {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 1.5rem;
+  align-items: center;
+}
+
+.modal-content form label {
+  text-align: right;
+  font-weight: 600;
+}
+
+.modal-content form input,
+.modal-content form select,
+.modal-content form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
